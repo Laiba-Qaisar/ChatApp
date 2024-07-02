@@ -44,9 +44,14 @@ import useConversation from "../../zustand/useConversation";
 const Chat = ({ conversation, lastIdx  }) => {
 	const { selectedConversation, setSelectedConversation } = useConversation();
 
-	const isSelected = selectedConversation?._id === conversation._id;
-	const { onlineUsers } = useSocketContext();
-	const isOnline = onlineUsers.includes(conversation._id);
+	const isSelected = selectedConversation?._id === conversation._id; 
+	// const { onlineUsers } = useSocketContext();                           //  useSocketContext() is not defined.
+
+	// const isOnline = onlineUsers.includes(conversation._id);              // commented due to the useof onlineUsers variable from above.
+	const isOnline = false; // assigned temporary.
+
+	// emoji is not defined. assigned temporary below.
+	const emoji = '';
 
 	return (
 		<>

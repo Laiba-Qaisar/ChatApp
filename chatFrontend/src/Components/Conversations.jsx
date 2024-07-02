@@ -8,11 +8,14 @@ function Conversations() {
   console.log("Conversations:",conversations)
   return (
     <div>   
-       {conversations.map((Chat, idx) => (
+       {conversations.map((chat, idx) => (
+
       <Chat
-        key={Chat._id}
-        Chat={Chat}
-      
+        key={idx}
+        // Chat={chat} // no such parameter in Chat Component
+        conversation={chat}
+    
+
         lastIdx={idx === conversations.length - 1}
       />
     ))}

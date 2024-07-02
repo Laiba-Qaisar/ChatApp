@@ -11,7 +11,7 @@ const Login = () => {
     const avatarStyle = { backgroundColor: '#1bbd7e' };
   
 
-    const [username, setUsername] = useState(" ");
+    const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 
 	const { loading, login } = useLogin();
