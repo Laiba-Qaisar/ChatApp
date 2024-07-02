@@ -6,13 +6,29 @@ Introducing **BitChat**: a free, web-based, real-time chatting application built
 
 Follow these steps to set up the project:
 
-### Install Dependencies
+### Install Dependencies 💻
 
-# Frontend
+#### Frontend
+```
 cd chatFrontend
 npm i
+```
 
-# Backend
-cd ..
+#### Backend
+```
 cd Backend
 npm i
+```
+
+### Run Locally 🏃
+#### Client
+```
+cd chatFrontend
+npm run dev
+```
+
+#### Server
+```
+cd Backend
+npm start
+```
