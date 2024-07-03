@@ -1,16 +1,19 @@
-// import React from "react";
+// import React, { useEffect, useRef } from "react";
+// import { Avatar, CircularProgress } from "@mui/material";
 // import { createStyles, makeStyles } from "@mui/styles";
-// import {Avatar } from "@mui/material"
-// // import { deepOrange } from "@mui";
+// import { deepOrange } from "@mui/material/colors";
+// import useGetMessages from "../../hooks/useGetMessages";
+// import useListenMessages from "../../hooks/useListenMessages";
+ 
 
-// const useStyles = makeStyles(() =>
+// const useStyles = makeStyles((theme) =>
 //   createStyles({
 //     messageRow: {
-//       display: "flex"
+//       display: "flex",
 //     },
 //     messageRowRight: {
 //       display: "flex",
-//       justifyContent: "flex-end"
+//       justifyContent: "flex-end",
 //     },
 //     messageBlue: {
 //       position: "relative",
@@ -19,7 +22,6 @@
 //       padding: "10px",
 //       backgroundColor: "#A8DDFD",
 //       width: "60%",
-//       //height: "50px",
 //       textAlign: "left",
 //       font: "400 .9em 'Open Sans', sans-serif",
 //       border: "1px solid #97C6E3",
@@ -33,7 +35,7 @@
 //         borderLeft: "15px solid transparent",
 //         borderRight: "15px solid transparent",
 //         top: "0",
-//         left: "-15px"
+//         left: "-15px",
 //       },
 //       "&:before": {
 //         content: "''",
@@ -44,8 +46,8 @@
 //         borderLeft: "16px solid transparent",
 //         borderRight: "16px solid transparent",
 //         top: "-1px",
-//         left: "-17px"
-//       }
+//         left: "-17px",
+//       },
 //     },
 //     messageOrange: {
 //       position: "relative",
@@ -54,7 +56,6 @@
 //       padding: "10px",
 //       backgroundColor: "#f8e896",
 //       width: "60%",
-//       //height: "50px",
 //       textAlign: "left",
 //       font: "400 .9em 'Open Sans', sans-serif",
 //       border: "1px solid #dfd087",
@@ -68,7 +69,7 @@
 //         borderLeft: "15px solid transparent",
 //         borderRight: "15px solid transparent",
 //         top: "0",
-//         right: "-15px"
+//         right: "-15px",
 //       },
 //       "&:before": {
 //         content: "''",
@@ -79,13 +80,12 @@
 //         borderLeft: "16px solid transparent",
 //         borderRight: "16px solid transparent",
 //         top: "-1px",
-//         right: "-17px"
-//       }
+//         right: "-17px",
+//       },
 //     },
-
 //     messageContent: {
 //       padding: 0,
-//       margin: 0
+//       margin: 0,
 //     },
 //     messageTimeStampRight: {
 //       position: "absolute",
@@ -93,60 +93,76 @@
 //       fontWeight: "300",
 //       marginTop: "10px",
 //       bottom: "-3px",
-//       right: "5px"
+//       right: "5px",
 //     },
-
 //     orange: {
 //       color: theme.palette.getContrastText(deepOrange[500]),
 //       backgroundColor: deepOrange[500],
 //       width: theme.spacing(4),
-//       height: theme.spacing(4)
-//     },
-//     avatarNothing: {
-//       color: "transparent",
-//       backgroundColor: "transparent",
-//       width: theme.spacing(4),
-//       height: theme.spacing(4)
+//       height: theme.spacing(4),
 //     },
 //     displayName: {
-//       marginLeft: "20px"
-//     }
+//       marginLeft: "20px",
+//     },
 //   })
 // );
 
-// //avatarが左にあるメッセージ（他人）
-// export const MessageLeft = (props) => {
-//   const message = props.message ? props.message : "no message";
-//   const timestamp = props.timestamp ? props.timestamp : "";
-//   const photoURL = props.photoURL ? props.photoURL : "dummy.js";
-//   const displayName = props.displayName ? props.displayName : "名無しさん";
+// const Messages = () => {
 //   const classes = useStyles();
+//   const { messages, loading } = useGetMessages();
+//   useListenMessages();
+//   const lastMessageRef = useRef();
+
+//   useEffect(() => {
+//     setTimeout(() => {
+//       lastMessageRef.current?.scrollIntoView({ behavior: "smooth" });
+//     }, 100);
+//   }, [messages]);
+
 //   return (
-//     <>
-//       <div className={classes.messageRow}>
-//         <Avatar
-//           alt={displayName}
-//           className={classes.orange}
-//           src={photoURL}
-//         ></Avatar>
-//         <div>
-//           <div className={classes.displayName}>{displayName}</div>
-//           <div className={classes.messageBlue}>
-//             <div>
-//               <p className={classes.messageContent}>{message}</p>
-//             </div>
-//             <div className={classes.messageTimeStampRight}>{timestamp}</div>
+//     <div className='px-4 flex-1 overflow-auto'>
+//       {!loading &&
+//         messages.length > 0 &&
+//         messages.map((message, idx) => (
+//           <div key={message._id} ref={lastMessageRef}>
+//             {message.isSender ? (
+//               <MessageRight message={message.content} timestamp={message.timestamp} />
+//             ) : (
+//               <MessageLeft message={message.content} timestamp={message.timestamp} photoURL={message.photoURL} displayName={message.fullname} />
+//             )}
 //           </div>
-//         </div>
-//       </div>
-//     </>
+//         ))}
+
+ 
+//       {!loading && messages.length === 0 && (
+//         <p className='text-center'>Send a message to start the conversation</p>
+//       )}
+//     </div>
 //   );
 // };
-// //avatarが右にあるメッセージ（自分）
-// export const MessageRight = (props) => {
+
+// const MessageLeft = ({ message, timestamp, photoURL, displayName }) => {
 //   const classes = useStyles();
-//   const message = props.message ? props.message : "no message";
-//   const timestamp = props.timestamp ? props.timestamp : "";
+
+//   return (
+//     <div className={classes.messageRow}>
+//       <Avatar alt={displayName} className={classes.orange} src={photoURL}></Avatar>
+//       <div>
+//         <div className={classes.displayName}>{displayName}</div>
+//         <div className={classes.messageBlue}>
+//           <div>
+//             <p className={classes.messageContent}>{message}</p>
+//           </div>
+//           <div className={classes.messageTimeStampRight}>{timestamp}</div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// const MessageRight = ({ message, timestamp }) => {
+//   const classes = useStyles();
+
 //   return (
 //     <div className={classes.messageRowRight}>
 //       <div className={classes.messageOrange}>
@@ -156,183 +172,39 @@
 //     </div>
 //   );
 // };
-import React from "react";
-import { createStyles, makeStyles } from "@mui/styles";
-import { Avatar, ThemeProvider } from "@mui/material";
-import { createTheme } from '@mui/material/styles';
-import { purple ,deepOrange} from '@mui/material/colors';
 
-// Create the theme
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: purple[500],
-    },
-    secondary: {
-      main: '#f44336',
-    },
-  },
-});
+// export default Messages;
+import { useEffect, useRef } from "react";
+import useGetMessages from "../../hooks/useGetMessages";
+import MessageFormat from "./messagesFormat";
+import useListenMessages from "../../hooks/useListenMessages";
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    messageRow: {
-      display: "flex"
-    },
-    messageRowRight: {
-      display: "flex",
-      justifyContent: "flex-end"
-    },
-    messageBlue: {
-      position: "relative",
-      marginLeft: "20px",
-      marginBottom: "10px",
-      padding: "10px",
-      backgroundColor: "#A8DDFD",
-      width: "60%",
-      textAlign: "left",
-      font: "400 .9em 'Open Sans', sans-serif",
-      border: "1px solid #97C6E3",
-      borderRadius: "10px",
-      "&:after": {
-        content: "''",
-        position: "absolute",
-        width: "0",
-        height: "0",
-        borderTop: "15px solid #A8DDFD",
-        borderLeft: "15px solid transparent",
-        borderRight: "15px solid transparent",
-        top: "0",
-        left: "-15px"
-      },
-      "&:before": {
-        content: "''",
-        position: "absolute",
-        width: "0",
-        height: "0",
-        borderTop: "17px solid #97C6E3",
-        borderLeft: "16px solid transparent",
-        borderRight: "16px solid transparent",
-        top: "-1px",
-        left: "-17px"
-      }
-    },
-    messageOrange: {
-      position: "relative",
-      marginRight: "20px",
-      marginBottom: "10px",
-      padding: "10px",
-      backgroundColor: "#f8e896",
-      width: "60%",
-      textAlign: "left",
-      font: "400 .9em 'Open Sans', sans-serif",
-      border: "1px solid #dfd087",
-      borderRadius: "10px",
-      "&:after": {
-        content: "''",
-        position: "absolute",
-        width: "0",
-        height: "0",
-        borderTop: "15px solid #f8e896",
-        borderLeft: "15px solid transparent",
-        borderRight: "15px solid transparent",
-        top: "0",
-        right: "-15px"
-      },
-      "&:before": {
-        content: "''",
-        position: "absolute",
-        width: "0",
-        height: "0",
-        borderTop: "17px solid #dfd087",
-        borderLeft: "16px solid transparent",
-        borderRight: "16px solid transparent",
-        top: "-1px",
-        right: "-17px"
-      }
-    },
-    messageContent: {
-      padding: 0,
-      margin: 0
-    },
-    messageTimeStampRight: {
-      position: "absolute",
-      fontSize: ".85em",
-      fontWeight: "300",
-      marginTop: "10px",
-      bottom: "-3px",
-      right: "5px"
-    },
-    orange: {
-      color: theme.palette.getContrastText(deepOrange[500]),
-      backgroundColor: deepOrange[500],
-      width: theme.spacing(4),
-      height: theme.spacing(4)
-    },
-    avatarNothing: {
-      color: "transparent",
-      backgroundColor: "transparent",
-      width: theme.spacing(4),
-      height: theme.spacing(4)
-    },
-    displayName: {
-      marginLeft: "20px"
-    }
-  })
-);
+const Messages = () => {
+  const { messages, loading } = useGetMessages();
+  useListenMessages();
+  const lastMessageRef = useRef();
 
-//avatarが左にあるメッセージ（他人）
-export const MessageLeft = (props) => {
-  const classes = useStyles();
-  const message = props.message ? props.message : "no message";
-  const timestamp = props.timestamp ? props.timestamp : "";
-  const photoURL = props.photoURL ? props.photoURL : "dummy.js";
-  const displayName = props.displayName ? props.displayName : "名無しさん";
+  useEffect(() => {
+    setTimeout(() => {
+      lastMessageRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, 100);
+  }, [messages]);
 
   return (
-    <>
-      <div className={classes.messageRow}>
-        <Avatar
-          alt={displayName}
-          className={classes.orange}
-          src={photoURL}
-        ></Avatar>
-        <div>
-          <div className={classes.displayName}>{displayName}</div>
-          <div className={classes.messageBlue}>
-            <div>
-              <p className={classes.messageContent}>{message}</p>
-            </div>
-            <div className={classes.messageTimeStampRight}>{timestamp}</div>
+    <div className="px-4 flex-1 overflow-auto">
+      {!loading && messages.length > 0 &&
+        messages.map((message, index) => (
+          <div key={message._id} ref={index === messages.length - 1 ? lastMessageRef : null}>
+            <MessageFormat message={message} />
           </div>
-        </div>
-      </div>
-    </>
-  );
-};
+        ))}
 
-//avatarが右にあるメッセージ（自分）
-export const MessageRight = (props) => {
-  const classes = useStyles();
-  const message = props.message ? props.message : "no message";
-  const timestamp = props.timestamp ? props.timestamp : "";
-
-  return (
-    <div className={classes.messageRowRight}>
-      <div className={classes.messageOrange}>
-        <p className={classes.messageContent}>{message}</p>
-        <div className={classes.messageTimeStampRight}>{timestamp}</div>
-      </div>
+      {!loading && messages.length === 0 && (
+        <p className="text-center text-gray-500">Send a message to start the conversation</p>
+      )}
     </div>
   );
 };
 
-// Wrapping the entire application with ThemeProvider
-const App = () => (
-  <ThemeProvider theme={theme}>
-    <MessageLeft message="Hello there!" timestamp="10:00 AM" />
-    <MessageRight message="Hi!" timestamp="10:01 AM" />
-  </ThemeProvider>
-);
+export default Messages;
 
-export default App;

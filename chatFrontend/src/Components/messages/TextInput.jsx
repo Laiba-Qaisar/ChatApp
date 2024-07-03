@@ -1,55 +1,11 @@
-// import React from 'react'
-// // import TextField from '@material-ui/core/TextField';
-// import { createStyles, makeStyles } from "@mui/styles";
-// // import SendIcon from '@material-ui/icons/Send';
-// // import Button from '@material-ui/core/Button';
-
-
-// const useStyles = makeStyles(() =>
-//   createStyles({
-//     wrapForm : {
-//         display: "flex",
-//         justifyContent: "center",
-//         width: "95%",
-//         margin: `${theme.spacing(0)} auto`
-//     },
-//     wrapText  : {
-//         width: "100%"
-//     },
-//     button: {
-//         //margin: theme.spacing(1),
-//     },
-//   })
-// );
-
-
-// export const TextInput = () => {
-//     const classes = useStyles();
-//     return (
-//         <>
-//             <form className={classes.wrapForm}  noValidate autoComplete="off">
-//             <TextField
-//                 id="standard-text"
-//                 label="メッセージを入力"
-//                 className={classes.wrapText}
-//                 //margin="normal"
-//             />
-//             <Button variant="contained" color="primary" className={classes.button}>
-//                 <SendIcon />
-//             </Button>
-//             </form>
-//         </>
-//     )
-// }
-
-// TextInput.jsx
-import React from 'react';
+import React, { useState } from 'react';
 import { createStyles, makeStyles } from "@mui/styles";
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import SendIcon from '@mui/icons-material/Send';
-import { createTheme, useTheme, ThemeProvider } from '@mui/material/styles';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { purple } from '@mui/material/colors';
+import useSendMessage from '../../hooks/useSendMessage';
 
 const theme = createTheme({
   palette: {
@@ -66,42 +22,48 @@ const useStyles = makeStyles((theme) =>
   createStyles({
     wrapForm: {
       display: "flex",
-      alignItems: "center", // Align items vertically
-      width: "95%",
-      margin: `${theme.spacing(0)} auto`,
+      alignItems: "center",
+      width: "100%",
+      margin: `${theme.spacing(1)} auto`,
     },
     wrapText: {
       width: "100%",
     },
     button: {
       margin: theme.spacing(1),
-      height: "56px", // Adjust the height to match the TextField height
- 
+      height: "56px",
     },
   })
 );
 
 export const TextInput = () => {
-  const theme = useTheme();
   const classes = useStyles(theme);
+  const [message, setMessage] = useState("");
+  const { loading, sendMessage } = useSendMessage();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!message) return;
+    await sendMessage(message);
+    setMessage("");
+  };
 
   return (
     <ThemeProvider theme={theme}>
-      <form className={classes.wrapForm} noValidate autoComplete="off">
+      <form className={classes.wrapForm} noValidate autoComplete="off" onSubmit={handleSubmit}>
         <TextField
           id="standard-text"
-          label="メッセージを入力"
           className={classes.wrapText}
           margin="normal"
           variant="outlined"
+          placeholder="Type your message..."
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
         />
-        <Button variant="contained" color="primary" className={classes.button}>
+        <Button type="submit" variant="contained" color="primary" className={classes.button} disabled={loading}>
           <SendIcon />
         </Button>
       </form>
     </ThemeProvider>
   );
 };
-
-
-

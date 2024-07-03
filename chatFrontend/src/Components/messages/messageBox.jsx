@@ -1,78 +1,164 @@
-// import React from 'react';
-import { createStyles, makeStyles } from '@mui/styles';
-import Paper from '@mui/material/Paper';
-import { TextInput } from './TextInput';
-import { MessageLeft, MessageRight } from './message';
+//  import { useEffect } from "react";
+// import useConversation from "../../zustand/useConversation";
+// import Messages from "./message";
+// import { TiMessages, TiVideo, TiPhone } from "react-icons/ti";
+// import { useAuthContext } from "../../context/AuthContext";
+// import { TextInput } from "./TextInput";
+// import Avatar from '@mui/material/Avatar';
 
-const useStyles = makeStyles(() =>
-  createStyles({
-    container: {
-      width: '100%',
-     height: '100%',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: 20, // Adding padding for spacing
-    },
-    paper: {
-      width: '100%',
-      height: '100%',
-      display: 'flex',
-      alignItems: 'center',
-      flexDirection: 'column',
-      position: 'relative',
-      padding: 20, // Adding padding inside the Paper
-      boxShadow: '0 4px 8px rgba(0,0,0,0.1)', // Adding a subtle shadow for depth
-      backgroundColor: '#fff', // Setting a light background color
-    },
-    messagesBody: {
-      width: 'calc( 100% - 20px )',
-      margin: 10,
-      overflowY: 'scroll',
-      height: 'calc( 100% - 80px )',
-    },
-  })
-);
+// const MessageBox = () => {
+//   const { selectedConversation, setSelectedConversation } = useConversation();
 
-function MessageBox() {
+//   useEffect(() => {
+//     return () => setSelectedConversation(null);
+//   }, [setSelectedConversation]);
+
+//   return (
+//     <div style={{ backgroundColor: "#f0f0f0", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+//       {!selectedConversation ? (
+//         <NoChatSelected />
+//       ) : (
+//         <>
+//           {/* Header */}
+//           <div style={{ backgroundColor: "#fff", padding: "10px", display: "flex", alignItems: "center" }}>
+//             <Avatar src={selectedConversation.profilePic} alt={selectedConversation.fullName} style={{ width: "40px", height: "40px", marginRight: "10px" }} />
+//             <span style={{ fontSize: "2rem", fontWeight: "bold", flex: 1 }}>{selectedConversation.fullName}</span>
+//             <div style={{ display: "flex", alignItems: "center" }}>
+//               <TiPhone style={{ marginRight: "10px", cursor: "pointer",fontSize: "2rem" }} />
+//               <TiVideo style={{ cursor: "pointer" ,fontSize: "2rem" }} />
+//             </div>
+//           </div>
+//           {/* Messages */}
+//           <div style={{ flex: 1, overflowY: "auto", padding: "10px" }}>
+//             <Messages />
+//           </div>
+//           {/* Input */}
+//           <div style={{ backgroundColor: "#fff", padding: "10px", borderTop: "1px solid #ccc" }}>
+//             <TextInput />
+//           </div>
+//         </>
+//       )}
+//     </div>
+//   );
+// };
+
+// const NoChatSelected = () => {
+//   const { authUser } = useAuthContext();
+//   return (
+//     <div style={{ backgroundColor: "#f0f0f0", minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
+//       <div style={{ textAlign: "center" }}>
+//         <p>Welcome 👋 {authUser.fullName} ❄</p>
+//         <p>Select a chat to start messaging</p>
+//         <TiMessages style={{ fontSize: "64px", marginBottom: "20px" }} />
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default MessageBox;
+import { useEffect } from "react";
+import useConversation from "../../zustand/useConversation";
+import Messages from "./message";
+import { TiMessages, TiVideo, TiPhone } from "react-icons/ti";
+import { useAuthContext } from "../../context/AuthContext";
+import { TextInput } from "./TextInput";
+import ChatHeader from "./chatHeader";
+import { makeStyles } from '@mui/styles';
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: "flex",
+    flexDirection: "column",
+    //height: "100vh", // Ensure full viewport height
+    height: '100%',
+    backgroundColor: "#f0f0f0", // Background color for the entire MessageBox
+  //s  overflow: "hidden", // Hide overflow to prevent scrolling on this container
+  },
+  // header: {
+  //   display: "flex",
+  //   alignItems: "center",
+  //   justifyContent: "space-between",
+  //   backgroundColor: "#fff",
+  //   padding: theme.spacing(2),
+  //   borderBottom: "1px solid #ccc",
+  //   position: "sticky",
+  // },
+  conversation: {
+    flex: 1,
+   // overflowY: "auto",
+    padding: theme.spacing(2),
+    backgroundColor: "#fff", // Background color for the conversation area
+    marginBottom: theme.spacing(2), // Add margin at the bottom to separate from TextInput
+  },
+  inputContainer: {
+    backgroundColor: "#fff",
+    // padding: theme.spacing(2),
+    borderTop: "1px solid #ccc",
+    position: "sticky",
+    bottom: 0,
+    zIndex: 1000,
+  },
+}));
+
+const MessageBox = () => {
   const classes = useStyles();
+  const { selectedConversation, setSelectedConversation } = useConversation();
+
+  useEffect(() => {
+    return () => setSelectedConversation(null);
+  }, [setSelectedConversation]);
+
+  useEffect(() => {
+    console.log('--> re-render at MessageBox')
+  });
+
   return (
-    <div className={classes.container}>
-      <Paper className={classes.paper} elevation={2}>
-        <Paper id="style-1" className={classes.messagesBody}>
-          <MessageLeft
-            message="あめんぼあかいなあいうえお"
-            timestamp="MM/DD 00:00"
-            photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-            displayName=""
-            avatarDisp={true}
+    <div className={classes.root}>
+      {!selectedConversation ? (
+        <NoChatSelected />
+      ) : (
+        <>
+          {/* Header */}
+          {/* ChatHeader */}
+          <ChatHeader
+            fullName={selectedConversation.fullName}
+            profilePic={selectedConversation.profilePic}
           />
-          <MessageLeft
-            message="xxxxxhttps://yahoo.co.jp xxxxxxxxxあめんぼあかいなあいうえおあいうえおかきくけこさぼあかいなあいうえおあいうえおかきくけこさぼあかいなあいうえおあいうえおかきくけこさいすせそ"
-            timestamp="MM/DD 00:00"
-            photoURL=""
-            displayName="テスト"
-            avatarDisp={false}
-          />
-          <MessageRight
-            message="messageRあめんぼあかいなあいうえおあめんぼあかいなあいうえおあめんぼあかいなあいうえお"
-            timestamp="MM/DD 00:00"
-            photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-            displayName="まさりぶ"
-            avatarDisp={true}
-          />
-          <MessageRight
-            message="messageRあめんぼあかいなあいうえおあめんぼあかいなあいうえお"
-            timestamp="MM/DD 00:00"
-            photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-            displayName="まさりぶ"
-            avatarDisp={false}
-          />
-        </Paper>
-        <TextInput />
-      </Paper>
+          {/* <div className={classes.header}>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <Avatar src={selectedConversation.profilePic} alt={selectedConversation.fullName} style={{ width: "40px", height: "40px", marginRight: "10px" }} />
+              <span style={{ fontSize: "1.1rem", fontWeight: "bold" }}>{selectedConversation.fullName}</span>
+            </div>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <TiPhone style={{ marginRight: "10px", cursor: "pointer" }} />
+              <TiVideo style={{ cursor: "pointer" }} />
+            </div>
+          </div> */}
+          {/* Messages */}
+          <div className={classes.conversation}>
+            <Messages />
+          </div>
+          {/* Input */}
+          <div className={classes.inputContainer}>
+            <TextInput />
+          </div>
+        </>
+      )}
     </div>
   );
-}
+};
+
+const NoChatSelected = () => {
+  const { authUser } = useAuthContext();
+  return (
+    <div style={{ backgroundColor: "#f0f0f0", minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
+      <div style={{ textAlign: "center" }}>
+        <p>Welcome 👋 {authUser.fullName} ❄</p>
+        <p>Select a chat to start messaging</p>
+        <TiMessages style={{ fontSize: "64px", marginBottom: "20px" }} />
+      </div>
+    </div>
+  );
+};
 
 export default MessageBox;
