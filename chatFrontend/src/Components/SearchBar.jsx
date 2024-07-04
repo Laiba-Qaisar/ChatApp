@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
-import useConversation from '../zustand/useConversation';
+import{useConversation}  from '../context/useConversation';
 import useGetConversations from '../hooks/useGetConversations';
-import toast from 'react-hot-toast';
+ 
 
 function SearchBar() {
   const [search, setSearch] = useState('');

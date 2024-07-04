@@ -31,7 +31,7 @@
 import { Avatar , Typography } from "@mui/material";
 import { useAuthContext } from "../../context/AuthContext";
 import { extractTime } from "../../utils/extractTime";
-import useConversation from "../../zustand/useConversation";
+import {useConversation} from "../../context/useConversation";
 import { makeStyles  } from '@mui/styles';
 const useStyles = makeStyles((theme) => ({
   messageContainer: {

@@ -57,7 +57,7 @@
 
 // export default MessageBox;
 import { useEffect } from "react";
-import useConversation from "../../zustand/useConversation";
+import {useConversation} from "../../context/useConversation";
 import Messages from "./message";
 import { TiMessages, TiVideo, TiPhone } from "react-icons/ti";
 import { useAuthContext } from "../../context/AuthContext";

@@ -1,10 +1,10 @@
-
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv"
 import connectDatabase from "./db/connenction.js";
 import messageRoutes from "./routes/messageRoutes.js";
 import authRoutes from "./routes/authroutes.js";
 import userRoutes from "./routes/userRoutes.js";
+import searchroute from "./routes/searchroute.js"
 import { app, server } from "./soket/socket.js";
 import express from "express";
 // const app = express();
@@ -22,19 +22,18 @@ app.use(cookieParser());
 app.use("/api/auth/",authRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/users", userRoutes);
-app.get('/api/conversations/search', async (req, res) => {
-  const query = req.query.query.toLowerCase();
-  try {
-    const conversations = await Conversation.find({
-      fullName: { $regex: query, $options: 'i' },
-    });
-    res.json(conversations);
-  } catch (error) {
-    console.error('Error fetching conversations:', error);
-    res.status(500).send('Server error');
-  }
+app.get('/api/conversations',searchroute);  
+   
+// Connect to database
+connectDatabase();
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error("Error caught by error handling middleware:", err);
+  res.status(500).json({ error: "Internal server error" });
 });
+
+// Start the server
 server.listen(port, () => {
-  connectDatabase();
   console.log(`Server is running on http://localhost:${port}`);
 });
