@@ -1,30 +1,30 @@
-import React from 'react'
-import Chat from './Chat';
-
+import React, { useEffect, useState } from 'react'
+import Conversation from './Conversation';
 import useGetConversations from '../hooks/useGetConversations'
 import { CircularProgress } from '@mui/material'
+
 function Conversations() {
   const { loading, conversations } = useGetConversations();
   console.log("Conversations:",conversations)
+  const [loadedConversation, setLoadedConversation] = useState([]);
+  useEffect(() => {
+	setLoadedConversation(conversations);
+  }, [conversations])
   return (
-    <div>   
-       {conversations.map((chat, idx) => (
+   <div className='py-2 flex flex-col'>
+			{loadedConversation.map((conversation) => (
+				<Conversation
+					key={conversation._id}
+					conversation={conversation}
+					//lastIdx={idx === conversations.length - 1}
+				/>
+			))}
 
-      <Chat
-        key={idx}
-        // Chat={chat} // no such parameter in Chat Component
-        conversation={chat}
-    
+			{loading ? <CircularProgress/>: null}
+		</div>
 
-        lastIdx={idx === conversations.length - 1}
-      />
-    ))}
-    {loading ? <CircularProgress/> : null}
-    
-    </div>
-   
-
-  )
-}
+   )
+ }
 
 export default Conversations
+

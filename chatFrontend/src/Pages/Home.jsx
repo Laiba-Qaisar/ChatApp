@@ -22,8 +22,7 @@ const useStyles = makeStyles(() => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
-    height: '100vh',
-    backgroundColor: '#f0f0f0', // Add a background color for better contrast
+    backgroundColor: '669bbc', // Add a background color for better contrast
   },
   header: {
     height: '10vh',
@@ -48,32 +47,35 @@ const useStyles = makeStyles(() => ({
   },
   sidebar: {
     width: '25%', // Sidebar takes 1/4 of the screen
-    height: '100%', // Ensure the sidebar takes up the full height of the content area
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
+    // height: '100%', // Ensure the sidebar takes up the full height of the content area
     borderRight: '1px solid #ddd', // Adding a border to separate sidebar and message box
+    backgroundColor: '#fff', // Set background color for sidebar
+    padding: '20px', // Add padding inside the sidebar
+    overflowY: 'auto', // Enable scrolling if content exceeds height
+    '@media (max-width: 768px)': {
+      display: 'none', // Hide sidebar on smaller screens
+    },
   },
   messageBox: {
     flex: 1, // MessageBox takes the remaining space
     height: '100%', // Ensure the message box takes up the full height of the content area
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: '#fff', // Set background color for message box
+    padding: '20px', // Add padding inside the message box
+    paddingBottom: '0px',
+    overflowY: 'auto', // Enable scrolling if content exceeds height
   },
 }));
-
 const Home = () => {
   const classes = useStyles();
 
   return (
     <ThemeProvider theme={theme}>
-      <div className={classes.root}>
+     <div className={classes.root}>
         <div className={classes.header}>
-          <h1>Chat Application</h1>
+          <h1>Bit Chat</h1>
         </div>
         <div className={classes.content}>
-          <div className={classes.sidebar}>
+          <div className={`${classes.sidebar} sidebar-container`}>
             <AppSidebar />
           </div>
           <div className={classes.messageBox}>
@@ -83,9 +85,10 @@ const Home = () => {
         <div className={classes.footer}>
           <p>&copy; 2024 Chat Application</p>
         </div>
-      </div>
+   </div>
     </ThemeProvider>
   );
 };
 
 export default Home;
+ 
