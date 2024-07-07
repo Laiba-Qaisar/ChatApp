@@ -1,0 +1,20 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
+body {
+  margin: 0px;
+}
+
+.sidebar-single-chat-selected,
+.sidebar-single-chat:hover {
+  transition: all 0.3s;
+  padding-left: 5px;
+  background-color: #c2e2f0;
+  color: #03045e;
+  font-weight: bold;
+}
+
+.sidebar-container::-webkit-scrollbar {
+  display: none;
+}
