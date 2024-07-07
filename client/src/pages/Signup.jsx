@@ -20,6 +20,8 @@ import { useState } from "react";
 import useSignup from "../hooks/useSignup";
 
 const Signup = () => {
+  const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
+
   const paperStyle = {
     padding: "30px 20px",
     width: 500,
@@ -35,7 +37,14 @@ const Signup = () => {
     email: "",
     password: "",
     confirmPassword: "",
-    gender: "",
+    gender: "female",
+  });
+  const [isFirstTimeFilled, setIsFirstTimeFilled] = useState({
+    fullName: false,
+    username: false,
+    email: false,
+    password: false,
+    confirmPassword: false,
   });
 
   const { loading, signup } = useSignup();
@@ -62,7 +71,16 @@ const Signup = () => {
             placeholder="Enter your name"
             margin="normal"
             value={inputs.fullName}
-            onChange={(e) => setInputs({ ...inputs, fullName: e.target.value })}
+            helperText={
+              isFirstTimeFilled.fullName &&
+              inputs.fullName === "" &&
+              "Full Name cannot be empty"
+            }
+            error={isFirstTimeFilled.fullName && inputs.fullName === ""}
+            onChange={(e) => {
+              setInputs({ ...inputs, fullName: e.target.value });
+              setIsFirstTimeFilled({ ...isFirstTimeFilled, fullName: true });
+            }}
           />
           <TextField
             fullWidth
@@ -70,7 +88,19 @@ const Signup = () => {
             placeholder="Enter your email"
             margin="normal"
             value={inputs.email}
-            onChange={(e) => setInputs({ ...inputs, email: e.target.value })}
+            helperText={
+              isFirstTimeFilled.email &&
+              (!emailRegex.test(inputs.email) || inputs.email === "") &&
+              "Enter valid email"
+            }
+            error={
+              isFirstTimeFilled.email &&
+              (inputs.email === "" || !emailRegex.test(inputs.email))
+            }
+            onChange={(e) => {
+              setInputs({ ...inputs, email: e.target.value });
+              setIsFirstTimeFilled({ ...isFirstTimeFilled, email: true });
+            }}
           />
           <TextField
             fullWidth
@@ -78,7 +108,12 @@ const Signup = () => {
             placeholder="Enter your username"
             margin="normal"
             value={inputs.username}
-            onChange={(e) => setInputs({ ...inputs, username: e.target.value })}
+            helperText={inputs.username === "" && "Username cannot be empty"}
+            error={isFirstTimeFilled.username && inputs.username === ""}
+            onChange={(e) => {
+              setInputs({ ...inputs, username: e.target.value });
+              setIsFirstTimeFilled({ ...isFirstTimeFilled, username: true });
+            }}
           />
           <FormControl component="fieldset" style={marginTop} margin="normal">
             <FormLabel component="legend">Gender</FormLabel>
@@ -104,7 +139,19 @@ const Signup = () => {
             type="password"
             margin="normal"
             value={inputs.password}
-            onChange={(e) => setInputs({ ...inputs, password: e.target.value })}
+            helperText={
+              isFirstTimeFilled.password &&
+              (inputs.password === "" || inputs.password.length < 6) &&
+              "Password length should be greater than six"
+            }
+            error={
+              isFirstTimeFilled.password &&
+              (inputs.password === "" || inputs.password.length < 6)
+            }
+            onChange={(e) => {
+              setInputs({ ...inputs, password: e.target.value });
+              setIsFirstTimeFilled({ ...isFirstTimeFilled, password: true });
+            }}
           />
           <TextField
             fullWidth
@@ -113,11 +160,24 @@ const Signup = () => {
             type="password"
             margin="normal"
             value={inputs.confirmPassword}
-            onChange={(e) =>
-              setInputs({ ...inputs, confirmPassword: e.target.value })
+            helperText={
+              isFirstTimeFilled.confirmPassword &&
+              inputs.confirmPassword !== inputs.password &&
+              "Passwords do not match"
             }
+            error={
+              isFirstTimeFilled.confirmPassword &&
+              inputs.confirmPassword !== inputs.password
+            }
+            onChange={(e) => {
+              setInputs({ ...inputs, confirmPassword: e.target.value });
+              setIsFirstTimeFilled({
+                ...isFirstTimeFilled,
+                confirmPassword: true,
+              });
+            }}
           />
-          s
+
           <Typography variant="body2" style={{ margin: "8px" }}>
             Already have an account?
             <Link

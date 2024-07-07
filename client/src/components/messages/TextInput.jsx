@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { createStyles, makeStyles } from "@mui/styles";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme) =>
       alignItems: "center",
       width: "100%",
       margin: `${theme.spacing(1)} auto`,
+      marginBottom: "20px",
     },
     wrapText: {
       width: "100%",
@@ -39,14 +40,24 @@ const useStyles = makeStyles((theme) =>
 export const TextInput = () => {
   const classes = useStyles(theme);
   const [message, setMessage] = useState("");
+  const [isMessageEmpty, setIsMessageEmpty] = useState(false);
   const { loading, sendMessage } = useSendMessage();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!message) return;
+    if (!message) {
+      setIsMessageEmpty(true);
+      return;
+    }
     await sendMessage(message);
     setMessage("");
   };
+
+  useEffect(() => {
+    setTimeout(function () {
+      setIsMessageEmpty(false);
+    }, 2000);
+  }, [handleSubmit]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -63,7 +74,11 @@ export const TextInput = () => {
           variant="outlined"
           placeholder="Type your message..."
           value={message}
-          onChange={(e) => setMessage(e.target.value)}
+          helperText={isMessageEmpty ? "Please enter a message" : ""}
+          error={isMessageEmpty && message.length === 0}
+          onChange={(e) => {
+            setMessage(e.target.value);
+          }}
         />
         <Button
           type="submit"

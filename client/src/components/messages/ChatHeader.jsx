@@ -1,6 +1,5 @@
 import React from "react";
 import Avatar from "@mui/material/Avatar";
-import { TiPhone, TiVideo } from "react-icons/ti";
 import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles((theme) => ({
@@ -29,12 +28,6 @@ const ChatHeader = ({ fullName, profilePic }) => {
           style={{ width: "40px", height: "40px", marginRight: "10px" }}
         />
         <span style={{ fontSize: "2rem", fontWeight: "bold" }}>{fullName}</span>
-      </div>
-      <div style={{ display: "flex", alignItems: "center" }}>
-        <TiPhone
-          style={{ marginRight: "10px", cursor: "pointer", fontSize: "2rem" }}
-        />
-        <TiVideo style={{ cursor: "pointer", fontSize: "2rem" }} />
       </div>
     </div>
   );
